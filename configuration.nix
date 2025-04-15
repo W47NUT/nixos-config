@@ -129,8 +129,6 @@
       tailscale
       man-pages
       man-pages-posix
-      bibata-cursors
-      glib
     ];
   };
 
@@ -169,6 +167,9 @@
 
       # pick which you like most
       bluez blueman bluetuith
+
+      bibata-cursors
+      glib
     ];
   };
 
