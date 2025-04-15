@@ -97,6 +97,8 @@
     sessionVariables = {
       BROWSER = "firefox";
       DEFAULT_BROWSER = "firefox";
+
+      EDITOR = "nvim";
       
       # nixpkgs
       NIXOS_OZONE_WL = "1";
