@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ self, pkgs, system, ... }:
 
 {
   imports = [
@@ -140,6 +140,8 @@
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     shell = pkgs.zsh;
     packages = with pkgs; [
+      self.packages."${system}".nvf
+
       vscode
       fastfetch
       python314
