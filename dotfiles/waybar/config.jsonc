@@ -1,0 +1,117 @@
+{
+  "position": "top",
+  "layer": "top",
+  "height": 36,
+  "modules-left": [
+    "custom/icon",
+    "tray"
+  ],
+  "modules-center": [
+    "niri/workspaces",
+  ],
+  "modules-right": [
+    "wireplumber",
+    "cpu",
+    "memory",
+    "temperature",
+    "battery",
+    "clock"
+  ],
+  "custom/icon": {
+    "format": "",
+    "tooltip": false,
+    "on-click": "fuzzel"
+  },
+  "niri/workspaces": {
+    "format": "{icon}",
+    "format-icons": {
+      "active": "●",
+      "default": "○"
+    }
+  },
+  "tray": {
+    "spacing": 10
+  },
+  "wireplumber": {
+    "format": "{icon}",
+    "format-muted": " ",
+    "format-icons": [
+      " ",
+      " ",
+      " "
+    ]
+  },
+  "cpu": {
+    "format": "  {usage}%",
+    "interval": 12
+  },
+  "memory": {
+    "format": "  {percentage}%",
+    "interval": 12
+  },
+  "temperature": {
+    "format": " {temperatureC}󰔄",
+    "critical-threshold": 50
+  },
+  "backlight": {
+    "format": " {percent}%"
+  },
+  "battery": {
+    "format": "{icon} {capacity}%",
+    "format-charging": "{icon} {capacity}%",
+    "format-plugged": "󰂅 {capacity}%",
+    "format-full": "󰁹 {capacity}%",
+    "format-icons": {
+      "discharging": [
+        "󰁺",
+        "󰁻",
+        "󰁼",
+        "󰁽",
+        "󰁾",
+        "󰁿",
+        "󰂀",
+        "󰂁",
+        "󰂂",
+        "󰁹"
+      ],
+      "charging": [
+        "󰢜",
+        "󰂆",
+        "󰂇",
+        "󰂈",
+        "󰢝",
+        "󰂉",
+        "󰂉",
+        "󰂊",
+        "󰂋",
+        "󰂅"
+      ],
+    },
+  },
+  "clock": {
+    "format": "  {:%H:%M}",
+    "format-alt": "  {:%F}",
+    "interval": 5,
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 3,
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#ee5396'><b>{}</b></span>",
+        "days": "<span color='#be95ff'><b>{}</b></span>",
+        "weeks": "<span color='#33b1ff'><b>W{}</b></span>",
+        "weekdays": "<span color='#3ddbd9'><b>{}</b></span>",
+        "today": "<span color='#42be65'><b><u>{}</u></b></span>"
+      }
+    },
+    "actions": {
+      "on-click-right": "mode",
+      "on-scroll-up": "tz_up",
+      "on-scroll-down": "tz_down",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    }
+  }
+}

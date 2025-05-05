@@ -1,0 +1,379 @@
+input {
+    keyboard {
+        repeat-rate 50
+        repeat-delay 300
+
+        xkb {
+            layout "us"
+        }
+    }
+
+    touchpad {
+        click-method "clickfinger"
+        natural-scroll
+        scroll-method "two-finger"
+    }
+
+    mouse {
+        accel-profile "flat"
+        scroll-method "on-button-down"
+    }
+
+    focus-follows-mouse
+}
+
+output "eDP-1" {
+    mode "2256x1504@59.999"
+    scale 1
+    transform "normal"
+    position x=0 y=0
+}
+
+layout {
+    gaps 8
+    struts {
+        left 0
+        right 0
+        top 0
+        bottom 0
+    }
+    focus-ring { off; }
+    border {
+        width 3
+        active-color "#ff79c6"
+        inactive-color "#44475a"
+    }
+    //insert-hint { color "rgb(127 200 255 / 50%)"; }
+    //default-column-width { proportion 0.500000; }
+    //preset-column-widths {
+    //    proportion 0.333333
+    //    proportion 0.500000
+    //    proportion 0.666667
+    //    proportion 1.000000
+    // }
+    center-focused-column "on-overflow"
+}
+
+cursor {
+    xcursor-theme "Bibata-Modern-Ice"
+    xcursor-size 24
+}
+
+hotkey-overlay { skip-at-startup; }
+environment {
+    "XCURSOR_THEME" "Bibata-Modern-Ice"
+    "XCURSOR_SIZE" "24"
+    "CLUTTER_BACKEND" "wayland"
+    DISPLAY ":0"
+    "GDK_BACKEND" "wayland,x11"
+    "MOZ_ENABLE_WAYLAND" "1"
+    "NIXOS_OZONE_WL" "1"
+    "QT_QPA_PLATFORM" "wayland;xcb"
+    "QT_WAYLAND_DISABLE_WINDOWDECORATION" "1"
+    "SDL_VIDEODRIVER" "wayland"
+    TERM "kitty"
+    TERMINAL "kitty"
+}
+
+binds {
+    // The bindings are organized by layer //
+
+
+    //// MOUSE ////
+    // We recommend binding `Mod` to a mouse button for convenience.
+
+    // `Mod+M1` will move the window (with visual hints to where)
+    // `Mod+M2` will resize the window by the nearest edge
+    // `Mod+M3` will scroll to change focus or workspace
+
+    Mod+WheelScrollDown cooldown-ms=150 { focus-window-or-workspace-down; }
+    Mod+WheelScrollUp   cooldown-ms=150 { focus-window-or-workspace-up; }
+
+    Mod+Shift+WheelScrollDown cooldown-ms=150 { move-window-down-or-to-workspace-down; }
+    Mod+Shift+WheelScrollUp   cooldown-ms=150 { move-window-up-or-to-workspace-up; }
+
+    Mod+WheelScrollRight { focus-column-right; }
+    Mod+WheelScrollLeft  { focus-column-left; }
+    Mod+Ctrl+WheelScrollDown { focus-column-right; }
+    Mod+Ctrl+WheelScrollUp   { focus-column-left; }
+
+    Mod+Shift+WheelScrollRight { move-column-right; }
+    Mod+Shift+WheelScrollLeft  { move-column-left; }
+    Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
+    Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
+
+    
+    //// TOP LEVEL LAYER ////
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "volumectl" "-u" "up"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "volumectl" "-u" "down"; }
+    XF86AudioMute        allow-when-locked=true { spawn "volumectl" "toggle-mute"; }
+    Mod+TouchpadScrollDown allow-when-locked=true { spawn "volumectl" "-u" "up"; }
+    Mod+TouchpadScrollUp   allow-when-locked=true { spawn "volumectl" "-u" "down"; }
+
+    Shift+XF86AudioRaiseVolume allow-when-locked=true { spawn "volumectl" "-m" "up"; }
+    Shift+XF86AudioLowerVolume allow-when-locked=true { spawn "volumectl" "-m" "down"; }
+    Shift+XF86AudioMute        allow-when-locked=true { spawn "volumectl" "-m" "toggle-mute"; }
+    XF86AudioMicMute           allow-when-locked=true { spawn "volumectl" "-m" "toggle-mute"; }
+
+    XF86MonBrightnessUp   allow-when-locked=true { spawn "lightctl" "up"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "lightctl" "down"; }
+    Mod+TouchpadScrollLeft  allow-when-locked=true { spawn "lightctl" "up"; }
+    Mod+TouchpadScrollRight allow-when-locked=true { spawn "lightctl" "down"; }
+
+    Print       { screenshot; }
+    Shift+Print { screenshot-screen; }
+    Ctrl+Print  { screenshot-window; }
+
+
+    //// SUPER LAYER ////
+    /// Super Apps ///
+    Mod+Slash       { show-hotkey-overlay; }
+    Mod+Return { spawn "kitty"; }
+    Mod+space { spawn "fuzzel"; }
+    //Mod+Q { spawn "reboot"; } // set to powermenu
+    //Mod+Semicolon { spawn midos-syspref; }
+
+    /// Super Functions ///
+    Mod+R       { maximize-column; } // reset-window-width
+    //Mod+Z { PREV-WINDOW; }
+    Mod+W { close-window; }
+    Mod+F { fullscreen-window; }
+    //Mod+C { FOCUS-CHILD; }
+    //Mod+P { FOCUS-PARENT; }
+    //Mod+T { NA }
+
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+
+    // Actions to switch layouts.
+    // Note: if you uncomment these, make sure you do NOT have
+    // a matching layout switch hotkey configured in xkb options above.
+    // Having both at once on the same hotkey will break the switching,
+    // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
+    Mod+B { switch-layout "prev"; }
+    Mod+N { switch-layout "next"; }
+    
+    /// Super Focus ///
+    Mod+Left  { focus-column-left; }
+    Mod+Down  { focus-window-or-workspace-down; }
+    Mod+Up    { focus-window-or-workspace-up; }
+    Mod+Right { focus-column-right; }
+    Mod+H { focus-column-left; }
+    Mod+J { focus-window-or-workspace-down; }
+    Mod+K { focus-window-or-workspace-up; }
+    Mod+L { focus-column-right; }
+
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+
+    Mod+Home { focus-column-first; }
+    Mod+End  { focus-column-last; }
+    Mod+I { focus-column-first; }
+    Mod+A { focus-column-last; }
+
+    Mod+Page_Down { focus-workspace-down; }
+    Mod+Page_Up   { focus-workspace-up; }
+    Mod+D         { focus-workspace-down; }
+    Mod+U         { focus-workspace-up; }
+
+
+    //// SUPER SHIFT LAYER ////
+    /// Super Shift Apps ///
+    // floating:
+    //Mod+Shift+Return { spawn "kitty"; }
+    Mod+Shift+Slash { show-hotkey-overlay; }
+
+    /// Super Shift Functions ///
+    Mod+Shift+R { reset-window-height; }
+    //Mod+Shift+W { spawn "pkill" "<app-id>"; }
+
+    /// Super Shift Move ///
+    Mod+Shift+Left  { move-column-left; }
+    Mod+Shift+Down  { move-window-down-or-to-workspace-down; }
+    Mod+Shift+Up    { move-window-up-or-to-workspace-up; }
+    Mod+Shift+Right { move-column-right; }
+    Mod+Shift+H { move-column-left; }
+    Mod+Shift+J { move-window-down-or-to-workspace-down; }
+    Mod+Shift+K { move-window-up-or-to-workspace-up; }
+    Mod+Shift+L { move-column-right; }
+
+    Mod+Shift+1 { move-window-to-workspace 1; }
+    Mod+Shift+2 { move-window-to-workspace 2; }
+    Mod+Shift+3 { move-window-to-workspace 3; }
+    Mod+Shift+4 { move-window-to-workspace 4; }
+    Mod+Shift+5 { move-window-to-workspace 5; }
+    Mod+Shift+6 { move-window-to-workspace 6; }
+    Mod+Shift+7 { move-window-to-workspace 7; }
+    Mod+Shift+8 { move-window-to-workspace 8; }
+    Mod+Shift+9 { move-window-to-workspace 9; }
+
+    Mod+Shift+Home { move-column-to-first; }
+    Mod+Shift+End  { move-column-to-last; }
+    Mod+Shift+I { move-column-to-first; }
+    Mod+Shift+A { move-column-to-last; }
+
+    Mod+Shift+Page_Down { move-workspace-down; }
+    Mod+Shift+Page_Up   { move-workspace-up; }
+    Mod+Shift+D { move-workspace-down; }
+    Mod+Shift+U { move-workspace-up; }
+
+    Mod+Shift+BracketLeft  { consume-or-expel-window-left; }
+    Mod+Shift+BracketRight { consume-or-expel-window-right; }
+
+    Mod+Shift+Comma  { consume-window-into-column; } // push
+    Mod+Shift+Period { expel-window-from-column; }   // pop
+
+    Mod+Shift+C { center-column; }
+
+
+    //// SUPER CTRL LAYER ////
+    /// Super Apps ///
+    // spawn as floating:
+    //Mod+Ctrl+Return { spawn "kitty"; }
+
+    /// Super Ctrl Functions ///
+    Mod+Ctrl+Z { focus-workspace-previous; }
+    Mod+Ctrl+R { switch-preset-column-width; }
+    Mod+Ctrl+Q { quit; }
+    //Mod+Ctrl+F { TOGGLE-FLOATING; }
+
+    Mod+Ctrl+Minus { set-window-height "-10%"; }
+    Mod+Ctrl+Equal { set-window-height "+10%"; }
+
+    /// Super Ctrl Focus ///
+    Mod+Ctrl+Left  { focus-monitor-left; }
+    Mod+Ctrl+Down  { focus-monitor-down; }
+    Mod+Ctrl+Up    { focus-monitor-up; }
+    Mod+Ctrl+Right { focus-monitor-right; }
+    Mod+Ctrl+H { focus-monitor-left; }
+    Mod+Ctrl+J { focus-monitor-down; }
+    Mod+Ctrl+K { focus-monitor-up; }
+    Mod+Ctrl+L { focus-monitor-right; }
+
+
+    //// SUPER CTRL SHIFT LAYER ////
+    /// Super Ctrl Shift Functions ///
+    Mod+Ctrl+Shift+R { switch-preset-window-height; }
+
+    /// Super Ctrl Shift Move ///
+    Mod+Ctrl+Shift+Left  { move-window-to-monitor-left; }
+    Mod+Ctrl+Shift+Down  { move-window-to-monitor-down; }
+    Mod+Ctrl+Shift+Up    { move-window-to-monitor-up; }
+    Mod+Ctrl+Shift+Right { move-window-to-monitor-right; }
+    Mod+Ctrl+Shift+H { move-window-to-monitor-left; }
+    Mod+Ctrl+Shift+J { move-window-to-monitor-down; }
+    Mod+Ctrl+Shift+K { move-window-to-monitor-up; }
+    Mod+Ctrl+Shift+L { move-window-to-monitor-right; }
+
+
+    //// SUPER ALT LAYER ////
+    /// Super Alt Apps ///
+    Super+Alt+E { spawn "kitty"; }
+    Super+Alt+L { spawn "swaylock"; }
+    Super+Alt+B { spawn "brave"; }
+    Super+Alt+P { spawn "bitwarden"; }
+    Super+Alt+S { screenshot-screen; }
+
+    Super+Alt+Minus { spawn "volumectl" "-u" "down"; }
+    Super+Alt+Equal { spawn "volumectl" "-u" "up"; }
+    Super+Alt+M     { spawn "volumectl" "toggle-mute"; }
+    Super+Alt+0     { spawn "volumectl" "toggle-mute"; }
+
+    // You can also use a shell. Do this if you need pipes, multiple commands, etc.
+    // Note: the entire command goes as a single argument in the end.
+    Super+Alt+V { spawn "bash" "-c" "cliphist list | fuzzel -d | cliphist decode | wl-copy"; }
+
+
+    //// SUPER ALT SHIFT LAYER ////
+    /// Super Alt Shift Apps ///
+    Super+Alt+Shift+S { screenshot; } // screenshot selection
+    Super+Alt+Shift+V { spawn "bash" "-c" "cliphist list | fuzzel -d | cliphist delete"; }
+
+    Super+Alt+Shift+Minus { spawn "volumectl" "-m" "down"; }
+    Super+Alt+Shift+Equal { spawn "volumectl" "-m" "up"; }
+    Super+Alt+Shift+M     { spawn "volumectl" "-m" "toggle-mute"; }
+    Super+Alt+Shift+0     { spawn "volumectl" "-m" "toggle-mute"; }
+
+
+    //// SUPER CTRL ALT LAYER ////
+    /// Super Ctrl Alt Apps ///
+    // spawn as floating:
+    //Super+Alt+Ctrl+E { spawn "kitty"; }
+    //Super+Alt+Ctrl+B { spawn "qutebrowser"; }
+    //Super+Alt+Ctrl+P { spawn "bitwarden"; }
+
+    Super+Alt+Ctrl+S { screenshot-window; }
+    Super+Alt+Ctrl+V { spawn "cliphist" "wipe"; }
+
+    /// Super Ctrl Alt Functions ///
+    Super+Alt+Ctrl+P { power-off-monitors; }
+}
+
+spawn-at-startup "avizo-service"
+spawn-at-startup "swww-daemon"
+spawn-at-startup "swww" "img" "/home/w47nut/Pictures/xana.png"
+
+prefer-no-csd
+
+window-rule {
+    draw-border-with-background false
+    geometry-corner-radius 8.000000 8.000000 8.000000 8.000000
+    clip-to-geometry true
+}
+window-rule {
+    match app-id="org.telegram.desktop"
+    block-out-from "screencast"
+}
+window-rule {
+    match app-id="firefox$" title="^Picture-in-Picture$"
+    match title="^Picture in picture$"
+    match title="^Discord Popout$"
+    open-floating true
+    default-floating-position relative-to="top-right" x=32 y=32
+}
+window-rule {
+    match app-id="^(pwvucontrol)" title=""
+    open-floating true
+}
+window-rule {
+    match app-id="^(Volume Control)" title=""
+    open-floating true
+}
+window-rule {
+    match app-id="^(dialog)" title=""
+    open-floating true
+}
+window-rule {
+    match app-id="^(file_progress)" title=""
+    open-floating true
+}
+window-rule {
+    match app-id="^(confirm)" title=""
+    open-floating true
+}
+window-rule {
+    match app-id="^(download)" title=""
+    open-floating true
+}
+window-rule {
+    match app-id="^(error)" title=""
+    open-floating true
+}
+window-rule {
+    match app-id="^(notification)" title=""
+    open-floating true
+}
+animations {
+    slowdown 1.000000
+    window-resize {
+        spring damping-ratio=1.000000 epsilon=0.000100 stiffness=800
+        custom-shader "vec4 resize_color(vec3 coords_curr_geo, vec3 size_curr_geo) {\n  vec3 coords_next_geo = niri_curr_geo_to_next_geo * coords_curr_geo;\n\n  vec3 coords_stretch = niri_geo_to_tex_next * coords_curr_geo;\n  vec3 coords_crop = niri_geo_to_tex_next * coords_next_geo;\n\n  // We can crop if the current window size is smaller than the next window\n  // size. One way to tell is by comparing to 1.0 the X and Y scaling\n  // coefficients in the current-to-next transformation matrix.\n  bool can_crop_by_x = niri_curr_geo_to_next_geo[0][0] <= 1.0;\n  bool can_crop_by_y = niri_curr_geo_to_next_geo[1][1] <= 1.0;\n\n  vec3 coords = coords_stretch;\n  if (can_crop_by_x)\n      coords.x = coords_crop.x;\n  if (can_crop_by_y)\n      coords.y = coords_crop.y;\n\n  vec4 color = texture2D(niri_tex_next, coords.st);\n\n  // However, when we crop, we also want to crop out anything outside the\n  // current geometry. This is because the area of the shader is unspecified\n  // and usually bigger than the current geometry, so if we don't fill pixels\n  // outside with transparency, the texture will leak out.\n  //\n  // When stretching, this is not an issue because the area outside will\n  // correspond to client-side decoration shadows, which are already supposed\n  // to be outside.\n  if (can_crop_by_x && (coords_curr_geo.x < 0.0 || 1.0 < coords_curr_geo.x))\n      color = vec4(0.0);\n  if (can_crop_by_y && (coords_curr_geo.y < 0.0 || 1.0 < coords_curr_geo.y))\n      color = vec4(0.0);\n\n  return color;\n}\n"
+    }
+}

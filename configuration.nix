@@ -318,6 +318,16 @@
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+systemd.user.tmpfiles.rules = [
+  "L+ %h/.config/waybar - - - - ${self + "/dotfiles/waybar"}"
+  "L+ %h/.config/niri - - - - ${self + "/dotfiles/niri"}"
+  "L+ %h/.config/starship.toml - - - - ${self + "/dotfiles/starship.toml"}"
+  "L+ %h/.config/btop - - - - ${self + "/dotfiles/btop"}"
+  "L+ %h/.config/kitty - - - - ${self + "/dotfiles/kitty"}"
+  "L+ %h/.config/ranger - - - - ${self + "/dotfiles/ranger"}"
+  "L+ %h/.config/.zshrc - - - - ${self + "/dotfiles/.zshrc"}"
+];
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
