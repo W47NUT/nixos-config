@@ -326,6 +326,7 @@ systemd.user.tmpfiles.rules = [
   "L+ %h/.config/kitty - - - - ${self + "/dotfiles/kitty"}"
   "L+ %h/.config/ranger - - - - ${self + "/dotfiles/ranger"}"
   "L+ %h/.config/.zshrc - - - - ${self + "/dotfiles/.zshrc"}"
+  "L+ %h/.gitconfig - - - - ${self + "/dotfiles/.gitconfig"}"
 ];
 
   # This value determines the NixOS release from which the default
