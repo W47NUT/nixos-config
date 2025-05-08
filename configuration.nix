@@ -5,11 +5,8 @@
     ./hardware-configuration.nix
   ];
 
-  boot.loader.grub = {
-    enable = true;
-    device = "/dev/sda";
-    useOSProber = true;
-  };
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   networking = {
     hostName = "xana";
@@ -41,7 +38,7 @@
 
       xkb = {
         layout = "us";
-        variant = "";
+        variant = "";  
       };
     };
 
@@ -168,6 +165,12 @@
       swww
       unzip
       ueberzugpp
+      obsidian
+      spotify
+      btop
+      wl-clipboard
+      cliphist
+      syncthing
 
       # pick which you like most
       bluez blueman bluetuith
