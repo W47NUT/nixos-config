@@ -1,6 +1,9 @@
-{ self, pkgs, system, ... }:
-
 {
+  self,
+  pkgs,
+  system,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
   ];
@@ -38,7 +41,7 @@
 
       xkb = {
         layout = "us";
-        variant = "";  
+        variant = "";
       };
     };
 
@@ -96,7 +99,7 @@
       DEFAULT_BROWSER = "firefox";
 
       EDITOR = "nvim";
-      
+
       # nixpkgs
       NIXOS_OZONE_WL = "1";
       NIXOS_XDG_OPEN_USE_PORTAL = "1";
@@ -134,7 +137,7 @@
   users.users.w47nut = {
     isNormalUser = true;
     description = "W47NUT";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = ["networkmanager" "wheel" "docker"];
     shell = pkgs.zsh;
     packages = with pkgs; [
       self.packages."${system}".nvf
@@ -170,10 +173,12 @@
       btop
       wl-clipboard
       cliphist
-      syncthing
+      protonmail-desktop
 
       # pick which you like most
-      bluez blueman bluetuith
+      bluez
+      blueman
+      bluetuith
 
       bibata-cursors
       glib
@@ -187,6 +192,7 @@
     waybar.enable = true;
     starship.enable = true;
     neovim.enable = true;
+    thunar.enable = true;
 
     zsh = {
       enable = true;
@@ -268,7 +274,7 @@
           "JetBrainsMono Nerd Font"
           "ComicShannsMono Nerd Font"
         ];
-        emoji = [ "Noto Color Emoji" ];
+        emoji = ["Noto Color Emoji"];
       };
 
       hinting = {
@@ -277,24 +283,24 @@
       };
 
       localConf =
-        builtins.replaceStrings [ "</fontconfig>" ]
-          [
-            ''
-                <alias>
-                  <family>Inter</family>
-                  <prefer><family>Inter Nerd Font</family></prefer>
-                </alias>
-              </fontconfig>
-            ''
-          ]
-          (
-            builtins.readFile (
-              pkgs.fetchurl {
-                url = "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.2.1/10-nerd-font-symbols.conf";
-                hash = "sha256-ZgHkMcXEPYDfzjdRR7KX3ws2u01GWUj48heMHaiaznY=";
-              }
-            )
-          );
+        builtins.replaceStrings ["</fontconfig>"]
+        [
+          ''
+              <alias>
+                <family>Inter</family>
+                <prefer><family>Inter Nerd Font</family></prefer>
+              </alias>
+            </fontconfig>
+          ''
+        ]
+        (
+          builtins.readFile (
+            pkgs.fetchurl {
+              url = "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.2.1/10-nerd-font-symbols.conf";
+              hash = "sha256-ZgHkMcXEPYDfzjdRR7KX3ws2u01GWUj48heMHaiaznY=";
+            }
+          )
+        );
     };
   };
 
@@ -303,13 +309,13 @@
 
     apparmor = {
       enable = true;
-      policies = { };
+      policies = {};
     };
 
     # view audit logs with `ausearch` or `aureport`
     audit = {
       enable = true;
-      rules = [ ];
+      rules = [];
     };
     auditd.enable = true;
 
@@ -317,20 +323,18 @@
     polkit.enable = true;
   };
 
-
   nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
-systemd.user.tmpfiles.rules = [
-  "L+ %h/.config/waybar - - - - ${self + "/dotfiles/waybar"}"
-  "L+ %h/.config/niri - - - - ${self + "/dotfiles/niri"}"
-  "L+ %h/.config/starship.toml - - - - ${self + "/dotfiles/starship.toml"}"
-  "L+ %h/.config/btop - - - - ${self + "/dotfiles/btop"}"
-  "L+ %h/.config/kitty - - - - ${self + "/dotfiles/kitty"}"
-  "L+ %h/.config/ranger - - - - ${self + "/dotfiles/ranger"}"
-  "L+ %h/.config/.zshrc - - - - ${self + "/dotfiles/.zshrc"}"
-  "L+ %h/.gitconfig - - - - ${self + "/dotfiles/.gitconfig"}"
-];
+  systemd.user.tmpfiles.rules = [
+    "L+ %h/.config/waybar - - - - ${self + "/dotfiles/waybar"}"
+    "L+ %h/.config/niri - - - - ${self + "/dotfiles/niri"}"
+    "L+ %h/.config/starship.toml - - - - ${self + "/dotfiles/starship.toml"}"
+    "L+ %h/.config/btop - - - - ${self + "/dotfiles/btop"}"
+    "L+ %h/.config/kitty - - - - ${self + "/dotfiles/kitty"}"
+    "L+ %h/.config/.zshrc - - - - ${self + "/dotfiles/.zshrc"}"
+    "L+ %h/.gitconfig - - - - ${self + "/dotfiles/.gitconfig"}"
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
