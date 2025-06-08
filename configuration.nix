@@ -1,9 +1,10 @@
 {
   self,
   pkgs,
-  system,
+  inputs,
   ...
-}: {
+}:
+{
   imports = [
     ./hardware-configuration.nix
   ];
@@ -131,20 +132,21 @@
       tailscale
       man-pages
       man-pages-posix
+      inputs.atomic-vim.packages.${pkgs.system}.default
     ];
   };
 
   users.users.w47nut = {
     isNormalUser = true;
     description = "W47NUT";
-    extraGroups = ["networkmanager" "wheel" "docker"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+    ];
     shell = pkgs.zsh;
     packages = with pkgs; [
-      self.packages."${system}".nvf
-
-      vscode
       fastfetch
-      python314
       git
       sshx
       bitwarden-desktop
@@ -157,7 +159,6 @@
       ranger
       brave
       hyprpicker
-      pywal
       swaynotificationcenter
       nautilus
       avizo
@@ -274,7 +275,7 @@
           "JetBrainsMono Nerd Font"
           "ComicShannsMono Nerd Font"
         ];
-        emoji = ["Noto Color Emoji"];
+        emoji = [ "Noto Color Emoji" ];
       };
 
       hinting = {
@@ -283,24 +284,26 @@
       };
 
       localConf =
-        builtins.replaceStrings ["</fontconfig>"]
-        [
-          ''
-              <alias>
-                <family>Inter</family>
-                <prefer><family>Inter Nerd Font</family></prefer>
-              </alias>
-            </fontconfig>
-          ''
-        ]
-        (
-          builtins.readFile (
-            pkgs.fetchurl {
-              url = "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.2.1/10-nerd-font-symbols.conf";
-              hash = "sha256-ZgHkMcXEPYDfzjdRR7KX3ws2u01GWUj48heMHaiaznY=";
-            }
-          )
-        );
+        builtins.replaceStrings
+          [ "</fontconfig>" ]
+          [
+            ''
+              
+                            <alias>
+                              <family>Inter</family>
+                              <prefer><family>Inter Nerd Font</family></prefer>
+                            </alias>
+                          </fontconfig>
+            ''
+          ]
+          (
+            builtins.readFile (
+              pkgs.fetchurl {
+                url = "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.2.1/10-nerd-font-symbols.conf";
+                hash = "sha256-ZgHkMcXEPYDfzjdRR7KX3ws2u01GWUj48heMHaiaznY=";
+              }
+            )
+          );
     };
   };
 
@@ -309,13 +312,13 @@
 
     apparmor = {
       enable = true;
-      policies = {};
+      policies = { };
     };
 
     # view audit logs with `ausearch` or `aureport`
     audit = {
       enable = true;
-      rules = [];
+      rules = [ ];
     };
     auditd.enable = true;
 
@@ -324,7 +327,10 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   systemd.user.tmpfiles.rules = [
     "L+ %h/.config/waybar - - - - ${self + "/dotfiles/waybar"}"

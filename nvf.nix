@@ -39,7 +39,10 @@
 
     spellcheck = {
       enable = true;
-      languages = [ "en" "de" ];
+      languages = [
+        "en"
+        "de"
+      ];
       programmingWordlist.enable = true;
     };
 
