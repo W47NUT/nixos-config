@@ -93,20 +93,20 @@
         flake = {
           lib' = import (self + "/lib") {
             inherit
-            self
-            inputs
-            top
-            ;
+              self
+              inputs
+              top
+              ;
 
           };
-      nixosConfigurations = import (self + "/hosts") {
-          inherit
-            self
-            inputs
-            top
-            withSystem
-            ;
-        };
+          nixosConfigurations = import (self + "/hosts") {
+            inherit
+              self
+              inputs
+              top
+              withSystem
+              ;
+          };
         };
       }
     );
