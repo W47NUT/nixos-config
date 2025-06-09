@@ -1,21 +1,71 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2025 midischwarz12
+# Copyright (c) 2025 W47NUT
+
 {
-  self,
+  config,
   pkgs,
-  inputs,
+  inputs',
+  lib,
+  self,
+  modulesPath,
   ...
 }:
 {
   imports = [
-    ./hardware-configuration.nix
+    (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+
+    initrd = {
+      availableKernelModules = [
+        "xhci_pci"
+        "nvme"
+        "usb_storage"
+        "sd_mod"
+        "rtsx_pci_sdmmc"
+      ];
+      kernelModules = [ ];
+    };
+    kernelModules = [ "kvm-intel" ];
+    extraModulePackages = [ ];
+  };
+
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-uuid/2918fd81-eee2-4de5-ba2d-9f0dabcc3740";
+      fsType = "ext4";
+    };
+
+    "/boot" = {
+      device = "/dev/disk/by-uuid/B91A-0F32";
+      fsType = "vfat";
+      options = [
+        "fmask=0077"
+        "dmask=0077"
+      ];
+    };
+  };
+
+  swapDevices = [ ];
+
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   networking = {
     hostName = "xana";
     networkmanager.enable = true;
+    useDHCP = lib.mkDefault true;
   };
+
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   time.timeZone = "America/New_York";
 
@@ -49,6 +99,7 @@
     # bluetooth client
     blueman.enable = true;
 
+    pulseaudio.enable = false;
     pipewire = {
       enable = true;
       alsa = {
@@ -74,13 +125,30 @@
   };
 
   hardware = {
-    pulseaudio.enable = false;
-
     bluetooth = {
       enable = true;
       powerOnBoot = true;
       settings.General.ControllerMode = "bredr";
     };
+  };
+
+  security = {
+    rtkit.enable = true;
+
+    apparmor = {
+      enable = true;
+      policies = { };
+    };
+
+    # view audit logs with `ausearch` or `aureport`
+    audit = {
+      enable = true;
+      rules = [ ];
+    };
+    auditd.enable = true;
+
+    # backend for password popup for authenticating priveleged tasks
+    polkit.enable = true;
   };
 
   virtualisation.docker.enable = true;
@@ -96,10 +164,12 @@
 
   environment = {
     sessionVariables = {
-      BROWSER = "firefox";
-      DEFAULT_BROWSER = "firefox";
+      BROWSER = "brave";
+      DEFAULT_BROWSER = "brave";
 
-      EDITOR = "nvim";
+      EDITOR = "vi";
+      PAGER = "vi +Man!";
+      MANPAGER = "vi +Man!";
 
       # nixpkgs
       NIXOS_OZONE_WL = "1";
@@ -128,11 +198,32 @@
       MOZ_ENABLE_WAYLAND = "1";
     };
 
+    shellAliases = {
+      cat = "${pkgs.bat}/bin/bat --style=plain --theme=ansi --pager=never";
+      g = "${pkgs.git}/bin/git";
+
+      tree = "${pkgs.eza}/bin/eza --color always --icons --hyperlink --group-directories-first --tree";
+      l = "${pkgs.eza}/bin/eza --color always --icons --hyperlink";
+      l1 = "${pkgs.eza}/bin/eza --color always --icons --hyperlink --group-directories-first --tree --level=1";
+      l2 = "${pkgs.eza}/bin/eza --color always --icons --hyperlink --group-directories-first --tree --level=2";
+      l3 = "${pkgs.eza}/bin/eza --color always --icons --hyperlink --group-directories-first --tree --level=3";
+      ll = "${pkgs.eza}/bin/eza --color always --icons --hyperlink --group-directories-first --tree --level=1 --long --header --inode --links";
+      la = "${pkgs.eza}/bin/eza --color always --icons --hyperlink --group-directories-first --tree --level=1 --long --header --inode --links --all";
+
+      rebuild = "${pkgs.nh}/bin/nh os -v switch \"$HOME/flake\"";
+      repl = "${pkgs.nh}/bin/nh os -v repl \"$HOME/flake\"";
+      build-vm = "${pkgs.nh}/bin/nh os -v switch \"$HOME/flake\"";
+      clean = "${pkgs.nh}/bin/nh clean all";
+      dry-build = "nixos-rebuild -v --use-remote-sudo  dry-build --flake \"$HOME/flake\"";
+    };
+
     systemPackages = with pkgs; [
       tailscale
       man-pages
       man-pages-posix
-      inputs.atomic-vim.packages.${pkgs.system}.default
+      git
+      (inputs'.atomic-vim.systemLib.mkAtomic (self + "/hosts/x86_64-linux/xana/atomicVim.nix"))
+      nh
     ];
   };
 
@@ -186,6 +277,17 @@
     ];
   };
 
+  systemd.user.tmpfiles.users."w47nut".rules = [
+    "L+ %h/.local/share/fonts       - - - - /run/current-system/sw/share/X11/fonts"
+    "L+ %h/.config/waybar - - - - ${self + "/dotfiles/waybar"}"
+    "L+ %h/.config/niri - - - - ${self + "/dotfiles/niri"}"
+    "L+ %h/.config/starship.toml - - - - ${self + "/dotfiles/starship.toml"}"
+    "L+ %h/.config/btop - - - - ${self + "/dotfiles/btop"}"
+    "L+ %h/.config/kitty - - - - ${self + "/dotfiles/kitty"}"
+    "L+ %h/.config/.zshrc - - - - ${self + "/dotfiles/.zshrc"}"
+    "L+ %h/.gitconfig - - - - ${self + "/dotfiles/.gitconfig"}"
+  ];
+
   programs = {
     xwayland.enable = true;
     steam.enable = true;
@@ -195,11 +297,23 @@
     neovim.enable = true;
     thunar.enable = true;
 
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+    };
+
     zsh = {
       enable = true;
+      enableCompletion = true;
       enableBashCompletion = true;
       autosuggestions.enable = true;
       syntaxHighlighting.enable = true;
+      histSize = 10000;
+      promptInit = ''
+        source <(jj util completion zsh)
+      '';
     };
   };
 
@@ -218,28 +332,26 @@
     terminal-exec.enable = true;
   };
 
-  systemd.user.tmpfiles.users."w47nut".rules = [
-    "L+ %h/.local/share/fonts       - - - - /run/current-system/sw/share/X11/fonts"
-  ];
+  nixpkgs = {
+    config.allowUnfree = true;
+    hostPlatform = lib.mkDefault "x86_64-linux";
+  };
 
   fonts = {
     enableDefaultPackages = true;
-    packages = with pkgs; [
-      nerdfonts
+    packages =
+      with pkgs;
+      [
+        liberation_ttf
+        ubuntu_font_family
 
-      liberation_ttf
-      ubuntu_font_family
+        noto-fonts
+        noto-fonts-cjk-serif
+        noto-fonts-cjk-sans
 
-      noto-fonts
-      noto-fonts-cjk-serif
-      noto-fonts-cjk-sans
-      noto-fonts-emoji
-
-      inter-nerdfont
-      jetbrains-mono
-      dejavu_fonts
-      cantarell-fonts
-    ];
+        inter-nerdfont
+      ]
+      ++ builtins.filter lib.isDerivation (lib.attrValues pkgs.nerd-fonts);
 
     fontDir = {
       enable = true;
@@ -271,10 +383,7 @@
           "Noto Sans CJK TC"
           "Noto Sans CJK HK"
         ];
-        monospace = [
-          "JetBrainsMono Nerd Font"
-          "ComicShannsMono Nerd Font"
-        ];
+        monospace = [ "JetBrainsMono Nerd Font" ];
         emoji = [ "Noto Color Emoji" ];
       };
 
@@ -288,12 +397,11 @@
           [ "</fontconfig>" ]
           [
             ''
-              
-                            <alias>
-                              <family>Inter</family>
-                              <prefer><family>Inter Nerd Font</family></prefer>
-                            </alias>
-                          </fontconfig>
+                <alias>
+                  <family>Inter</family>
+                  <prefer><family>Inter Nerd Font</family></prefer>
+                </alias>
+              </fontconfig>
             ''
           ]
           (
@@ -307,46 +415,5 @@
     };
   };
 
-  security = {
-    rtkit.enable = true;
-
-    apparmor = {
-      enable = true;
-      policies = { };
-    };
-
-    # view audit logs with `ausearch` or `aureport`
-    audit = {
-      enable = true;
-      rules = [ ];
-    };
-    auditd.enable = true;
-
-    # backend for password popup for authenticating priveleged tasks
-    polkit.enable = true;
-  };
-
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-
-  systemd.user.tmpfiles.rules = [
-    "L+ %h/.config/waybar - - - - ${self + "/dotfiles/waybar"}"
-    "L+ %h/.config/niri - - - - ${self + "/dotfiles/niri"}"
-    "L+ %h/.config/starship.toml - - - - ${self + "/dotfiles/starship.toml"}"
-    "L+ %h/.config/btop - - - - ${self + "/dotfiles/btop"}"
-    "L+ %h/.config/kitty - - - - ${self + "/dotfiles/kitty"}"
-    "L+ %h/.config/.zshrc - - - - ${self + "/dotfiles/.zshrc"}"
-    "L+ %h/.gitconfig - - - - ${self + "/dotfiles/.gitconfig"}"
-  ];
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "25.05";
 }
