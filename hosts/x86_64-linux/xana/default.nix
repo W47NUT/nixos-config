@@ -224,6 +224,7 @@
       git
       (inputs'.atomic-vim.systemLib.mkAtomic (self + "/hosts/x86_64-linux/xana/atomicVim.nix"))
       nh
+      inputs.atomic-vim.packages.${pkgs.system}.default
       starship
     ];
   };
@@ -297,7 +298,6 @@
     neovim.enable = true;
     thunar.enable = true;
     starship.enable = true;
-<<<<<<< Updated upstream:hosts/x86_64-linux/xana/default.nix
 
     direnv = {
       enable = true;
@@ -305,8 +305,6 @@
       enableBashIntegration = true;
       enableZshIntegration = true;
     };
-=======
->>>>>>> Stashed changes:configuration.nix
 
     zsh = {
       enable = true;
