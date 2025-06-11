@@ -323,6 +323,7 @@
       xdgOpenUsePortal = true;
       config.common.default = "*";
       extraPortals = with pkgs; [ xdg-desktop-portal-gnome ];
+      config.niri.default = [ "gtk" "gnome" ];
     };
 
     mime.enable = true;
