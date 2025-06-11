@@ -41,11 +41,11 @@
         "nvf": "nvf"
       },
       "locked": {
-        "lastModified": 1749438109,
-        "narHash": "sha256-3J90IOF9p1I1qlYxiRmjHsWSTgnxsL5qyvbisz/9ueo=",
+        "lastModified": 1749447171,
+        "narHash": "sha256-y730zWNboowFCrQNjE4y94Iz8ecETowXESxau5/m+gQ=",
         "ref": "refs/heads/main",
-        "rev": "bdd972946883dff06c7043dff9333161969f32fc",
-        "revCount": 10,
+        "rev": "87afdcb0e9fe130d3697c36d8d67d43218e697bd",
+        "revCount": 11,
         "type": "git",
         "url": "https://codeberg.org/midischwarz12/atomic-vim"
       },
@@ -388,11 +388,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1749237914,
-        "narHash": "sha256-N5waoqWt8aMr/MykZjSErOokYH6rOsMMXu3UOVH5kiw=",
+        "lastModified": 1749494155,
+        "narHash": "sha256-FG4DEYBpROupu758beabUk9lhrblSf5hnv84v1TLqMc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "70c74b02eac46f4e4aa071e45a6189ce0f6d9265",
+        "rev": "88331c17ba434359491e8d5889cce872464052c2",
         "type": "github"
       },
       "original": {

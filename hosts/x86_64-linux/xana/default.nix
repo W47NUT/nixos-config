@@ -224,8 +224,8 @@
       git
       (inputs'.atomic-vim.systemLib.mkAtomic (self + "/hosts/x86_64-linux/xana/atomicVim.nix"))
       nh
-      inputs.atomic-vim.packages.${pkgs.system}.default
       starship
+      jj
     ];
   };
 
@@ -291,13 +291,12 @@
   ];
 
   programs = {
-    xwayland.enable = true;
     steam.enable = true;
     niri.enable = true;
     waybar.enable = true;
     neovim.enable = true;
     thunar.enable = true;
-    starship.enable = true;
+    starship.enable =true;
 
     direnv = {
       enable = true;
@@ -314,7 +313,6 @@
       syntaxHighlighting.enable = true;
       histSize = 10000;
       promptInit = ''
-        source <(jj util completion zsh)
       '';
     };
   };
