@@ -224,6 +224,7 @@
       git
       (inputs'.atomic-vim.systemLib.mkAtomic (self + "/hosts/x86_64-linux/xana/atomicVim.nix"))
       nh
+      starship
     ];
   };
 
@@ -254,7 +255,6 @@
       nautilus
       avizo
       swaylock
-      starship
       lsd
       vivid
       swww
@@ -266,6 +266,7 @@
       wl-clipboard
       cliphist
       protonmail-desktop
+      starship
 
       # pick which you like most
       bluez
@@ -293,9 +294,10 @@
     steam.enable = true;
     niri.enable = true;
     waybar.enable = true;
-    starship.enable = true;
     neovim.enable = true;
     thunar.enable = true;
+    starship.enable = true;
+<<<<<<< Updated upstream:hosts/x86_64-linux/xana/default.nix
 
     direnv = {
       enable = true;
@@ -303,6 +305,8 @@
       enableBashIntegration = true;
       enableZshIntegration = true;
     };
+=======
+>>>>>>> Stashed changes:configuration.nix
 
     zsh = {
       enable = true;
