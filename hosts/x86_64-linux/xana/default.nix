@@ -322,6 +322,7 @@
       enable = true;
       xdgOpenUsePortal = true;
       config.common.default = "*";
+      extraPortals = with pkgs; [ xdg-desktop-portal-gnome ];
     };
 
     mime.enable = true;
