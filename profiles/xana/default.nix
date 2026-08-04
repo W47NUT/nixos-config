@@ -47,7 +47,10 @@
       };
     };
 
-    displayManager.gdm.enable = true;
+    displayManager = {
+	gdm.enable = true;
+	defaultSession = "niri";
+    };
 
     # bluetooth client
     blueman.enable = true;
@@ -244,7 +247,6 @@
   ];
 
   programs = {
-    steam.enable = true;
     niri.enable = true;
     waybar.enable = true;
     neovim.enable = true;
