@@ -10,6 +10,10 @@
   ...
 }:
 {
+  imports = [
+    inputs.dms.nixosModules.dank-material-shell
+  ];
+
   networking = {
     networkmanager.enable = true;
   };
@@ -72,11 +76,7 @@
 
     tailscale = {
       enable = true;
-      authKeyFile = "/etc/tailscale-auth.key";
       useRoutingFeatures = "client";
-      extraSetFlags = [
-        "--accept-routes"
-      ];
     };
   };
 
@@ -268,6 +268,11 @@
       syntaxHighlighting.enable = true;
       histSize = 10000;
       promptInit = "";
+    };
+
+    dank-material-shell = {
+      enable = true;
+      systemd.enable = false;
     };
   };
 
