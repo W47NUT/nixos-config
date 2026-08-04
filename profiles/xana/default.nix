@@ -248,7 +248,6 @@
 
   programs = {
     niri.enable = true;
-    waybar.enable = true;
     neovim.enable = true;
     thunar.enable = true;
     starship.enable = true;
@@ -272,7 +271,7 @@
 
     dank-material-shell = {
       enable = true;
-      systemd.enable = false;
+      systemd.enable = true;
     };
   };
 

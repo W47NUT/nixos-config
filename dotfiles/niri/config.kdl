@@ -316,7 +316,6 @@ binds {
     Super+Alt+Ctrl+P { power-off-monitors; }
 }
 
-spawn-at-startup "avizo-service"
 spawn-at-startup "swww-daemon"
 spawn-at-startup "swww" "img" "/home/w47nut/Pictures/xana.png"
 
