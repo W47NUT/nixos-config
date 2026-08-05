@@ -130,7 +130,8 @@ binds {
     /// Super Apps ///
     Mod+Slash       { show-hotkey-overlay; }
     Mod+Return { spawn "kitty"; }
-    Mod+space { spawn "fuzzel"; }
+    Mod+Space hotkey-overlay-title="Xana Launcher" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+    Mod+Shift+Space hotkey-overlay-title="Fuzzel (fallback)" { spawn "fuzzel"; }
     //Mod+Q { spawn "reboot"; } // set to powermenu
     //Mod+Semicolon { spawn midos-syspref; }
 
