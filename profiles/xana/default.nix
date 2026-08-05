@@ -238,10 +238,13 @@
   systemd.user.tmpfiles.users."w47nut".rules = [
     "L+ %h/.local/share/fonts       - - - - /run/current-system/sw/share/X11/fonts"
     "L+ %h/.config/waybar - - - - ${self + "/dotfiles/waybar"}"
-    "L+ %h/.config/niri - - - - ${self + "/dotfiles/niri"}"
+    "d %h/.config/niri 0700 - - -"
+    "d %h/.config/niri/dms 0700 - - -"
+    "L+ %h/.config/niri/config.kdl - - - - ${self + "/dotfiles/niri/config.kdl"}"
     "L+ %h/.config/starship.toml - - - - ${self + "/dotfiles/starship.toml"}"
     "L+ %h/.config/btop - - - - ${self + "/dotfiles/btop"}"
-    "L+ %h/.config/kitty - - - - ${self + "/dotfiles/kitty"}"
+    "d %h/.config/kitty 0700 - - -"
+    "L+ %h/.config/kitty/kitty.conf - - - - ${self + "/dotfiles/kitty/kitty.conf"}"
     "L+ %h/.config/.zshrc - - - - ${self + "/dotfiles/.zshrc"}"
     "L+ %h/.gitconfig - - - - ${self + "/dotfiles/.gitconfig"}"
   ];
