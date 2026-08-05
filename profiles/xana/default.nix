@@ -52,9 +52,11 @@
     };
 
     displayManager = {
-	gdm.enable = true;
-	defaultSession = "niri";
+      gdm.enable = true;
+      defaultSession = "niri";
     };
+
+    upower.enable = true;
 
     # bluetooth client
     blueman.enable = true;
@@ -247,6 +249,8 @@
     "L+ %h/.config/kitty/kitty.conf - - - - ${self + "/dotfiles/kitty/kitty.conf"}"
     "L+ %h/.config/.zshrc - - - - ${self + "/dotfiles/.zshrc"}"
     "L+ %h/.gitconfig - - - - ${self + "/dotfiles/.gitconfig"}"
+    "d %h/.local/share/icons 0755 - - -"
+    "L+ %h/.local/share/icons/xana-evolution-emblem.svg - - - - ${self + "/assets/icons/xana-evolution-emblem.svg"}"
   ];
 
   programs = {
