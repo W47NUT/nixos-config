@@ -12,6 +12,7 @@
 {
   imports = [
     inputs.dms.nixosModules.dank-material-shell
+    inputs.dank-greeter.nixosModules.default
     ./dms
   ];
 
@@ -53,14 +54,11 @@
     };
 
     displayManager = {
-      gdm.enable = true;
       defaultSession = "niri";
     };
 
     upower.enable = true;
 
-    # bluetooth client
-    blueman.enable = true;
 
     pulseaudio.enable = false;
     pipewire = {
@@ -125,6 +123,7 @@
     sessionVariables = {
       BROWSER = "brave";
       DEFAULT_BROWSER = "brave";
+      QS_ICON_THEME = "Papirus-Dark";
 
       EDITOR = "vi";
       PAGER = "vi +Man!";
@@ -177,6 +176,8 @@
     };
 
     systemPackages = with pkgs; [
+      papirus-icon-theme
+      hicolor-icon-theme
       tailscale
       man-pages
       man-pages-posix
@@ -281,7 +282,15 @@
       promptInit = "";
     };
 
+    dms-greeter = {
+      enable = true;
+      compositor.name = "niri";
+      configHome = "/home/w47nut";
+      logs.save = true;
+    };
     dank-material-shell = {
+
+
       enable = true;
       systemd.enable = true;
     };
