@@ -1,3 +1,6 @@
 [user]
 	email = w47nut@protonmail.com
 	name = W47NUT
+[credential "https://github.com"]
+	helper = 
+	helper = !gh auth git-credential

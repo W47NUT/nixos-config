@@ -181,6 +181,7 @@
       man-pages
       man-pages-posix
       git
+    gh
       (inputs.atomic-vim.lib.${pkgs.stdenv.hostPlatform.system}.mkAtomicVim ./atomicVim.nix)
       nh
       starship
@@ -200,6 +201,7 @@
     packages = with pkgs; [
       fastfetch
       git
+    gh
       sshx
       bitwarden-desktop
       vesktop
