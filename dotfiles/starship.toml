@@ -3,23 +3,28 @@ format = """
 $all\
 """
 
-palette = 'dracula'
+palette = 'xana_ansi'
 add_newline = true
 
-[palettes.dracula]
-foreground = '#F8F8F2'
-background = '#282A36'
-current_line = '#44475A'
-primary = '#1E1F29'
-box = '#44475A'
-blue	= '#6272A4'
-cyan = '#8BE9FD'
-green	= '#50FA7B'
-orange = '#FFB86C'
-pink = '#FF79C6'
-purple = '#BD93F9'
-red	= '#FF5555'
-yellow = '#F1FA8C'
+[palettes.xana_ansi]
+# These names resolve through Kitty's current ANSI palette.
+# Wallust can change their actual colors without rewriting Starship.
+foreground = 'bright-white'
+background = 'black'
+current_line = 'bright-black'
+primary = 'black'
+box = 'bright-black'
+
+blue = 'bright-blue'
+cyan = 'bright-cyan'
+green = 'bright-green'
+orange = 'bright-yellow'
+pink = 'bright-purple'
+purple = 'purple'
+red = 'bright-red'
+yellow = 'bright-yellow'
+
+
 
 [directory]
 format = '[─](fg:current_line)[](fg:pink)[󰷏 ](fg:primary bg:pink)[](fg:pink bg:box)[ $read_only$truncation_symbol$path](fg:foreground bg:box)[](fg:box)'

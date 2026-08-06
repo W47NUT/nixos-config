@@ -318,8 +318,6 @@ binds {
     Super+Alt+Ctrl+P { power-off-monitors; }
 }
 
-spawn-at-startup "swww-daemon"
-spawn-at-startup "swww" "img" "/home/w47nut/Pictures/xana.png"
 
 prefer-no-csd
 

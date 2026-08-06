@@ -252,6 +252,8 @@
     "L+ %h/.gitconfig - - - - ${self + "/dotfiles/.gitconfig"}"
     "d %h/.local/share/icons 0755 - - -"
     "L+ %h/.local/share/icons/xana-evolution-emblem.svg - - - - ${self + "/assets/icons/xana-evolution-emblem.svg"}"
+    "d %h/.local/share/wallpapers 0755 - - -"
+    "L+ %h/.local/share/wallpapers/xana - - - - ${self + "/assets/wallpapers/xana"}"
   ];
 
   programs = {

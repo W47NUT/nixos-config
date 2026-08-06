@@ -1,9 +1,9 @@
 {
-  "currentThemeName": "purple",
+  "currentThemeName": "dynamic",
   "currentThemeCategory": "generic",
   "customThemeFile": "",
-  "matugenScheme": "scheme-tonal-spot",
-  "matugenContrast": 0,
+  "matugenScheme": "scheme-content",
+  "matugenContrast": 0.15,
   "runUserMatugenTemplates": true,
   "matugenTargetMonitor": "",
   "popupTransparency": 0.97,
