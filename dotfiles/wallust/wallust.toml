@@ -1,0 +1,8 @@
+backend = "kmeans"
+color_space = "lchansi"
+palette = "ansidark16"
+threshold = 5
+check_contrast = true
+
+[templates]
+kitty = { template = "kitty.conf", target = "~/.config/kitty/xana-wallust.conf" }

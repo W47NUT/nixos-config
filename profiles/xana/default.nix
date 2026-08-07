@@ -186,6 +186,7 @@
       (inputs.atomic-vim.lib.${pkgs.stdenv.hostPlatform.system}.mkAtomicVim ./atomicVim.nix)
       nh
       starship
+      wallust
       jj
     ];
   };
@@ -230,6 +231,7 @@
       cliphist
       protonmail-desktop
       starship
+      wallust
 
       # pick which you like most
       bluez
@@ -251,6 +253,11 @@
     "L+ %h/.config/btop - - - - ${self + "/dotfiles/btop"}"
     "d %h/.config/kitty 0700 - - -"
     "L+ %h/.config/kitty/kitty.conf - - - - ${self + "/dotfiles/kitty/kitty.conf"}"
+    "f %h/.config/kitty/xana-wallust.conf 0600 - - -"
+    "d %h/.config/wallust 0700 - - -"
+    "d %h/.config/wallust/templates 0700 - - -"
+    "L+ %h/.config/wallust/wallust.toml - - - - ${self + "/dotfiles/wallust/wallust.toml"}"
+    "L+ %h/.config/wallust/templates/kitty.conf - - - - ${self + "/dotfiles/wallust/templates/kitty.conf"}"
     "L+ %h/.config/.zshrc - - - - ${self + "/dotfiles/.zshrc"}"
     "L+ %h/.gitconfig - - - - ${self + "/dotfiles/.gitconfig"}"
     "d %h/.local/share/icons 0755 - - -"
@@ -258,6 +265,55 @@
     "d %h/.local/share/wallpapers 0755 - - -"
     "L+ %h/.local/share/wallpapers/xana - - - - ${self + "/assets/wallpapers/xana"}"
   ];
+
+  systemd.user.services."xana-wallust-sync" = {
+    description = "Sync Kitty colors with the current DMS wallpaper";
+    after = [ "graphical-session.target" "dms.service" ];
+    wants = [ "dms.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = let
+        script = pkgs.writeShellScript "xana-wallust-sync" ''
+          set -eu
+          export PATH=/run/current-system/sw/bin:$PATH
+
+          state_dir="$HOME/.local/state/xana"
+          last_file="$state_dir/last-wallpaper"
+          mkdir -p "$state_dir"
+
+          wallpaper="$(
+            dms ipc call wallpaper get 2>/dev/null \
+            | grep -Eo '/[^[:cntrl:]]+\.(png|jpg|jpeg|webp|bmp)' \
+            | tail -n 1
+          )"
+
+          [ -n "$wallpaper" ] || exit 0
+          [ -f "$wallpaper" ] || exit 0
+
+          previous="$(cat "$last_file" 2>/dev/null || true)"
+          if [ "$previous" = "$wallpaper" ] && [ -s "$HOME/.config/kitty/xana-wallust.conf" ]; then
+            exit 0
+          fi
+
+          wallust run "$wallpaper" --saturation 45
+          printf '%s\n' "$wallpaper" > "$last_file"
+
+          kitty @ --to unix:/tmp/kitty-xana set-colors --all --configured "$HOME/.config/kitty/xana-wallust.conf" || true
+        '';
+      in "${script}";
+    };
+  };
+
+  systemd.user.timers."xana-wallust-sync" = {
+    description = "Poll DMS wallpaper changes for Kitty recoloring";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "20s";
+      OnUnitActiveSec = "15s";
+      Unit = "xana-wallust-sync.service";
+      Persistent = true;
+    };
+  };
 
   programs = {
     niri.enable = true;
