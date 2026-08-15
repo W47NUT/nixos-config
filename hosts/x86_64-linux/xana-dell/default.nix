@@ -6,7 +6,9 @@
 		../../../profiles/xana
 	];
 
-	networking.hostName = "xana";
+	networking.hostName = "xana-dell";
+
+  services.tailscale.enable = true;
 
 	boot.loader.systemd-boot.enable = true;
 	boot.loader.efi.canTouchEfiVariables = true;
